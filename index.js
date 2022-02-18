@@ -89,7 +89,7 @@ wss.on('connection', (ws, request) => {
 
   ws.on('close', () => {
     console.log('Client disconnected')
-
+    /*
     for (var key in users) {
       if (users[key].socket.includes(ws)) {
         if(users[key].socket.length == 1){
@@ -108,6 +108,7 @@ wss.on('connection', (ws, request) => {
         break;
       }
     }
+    */
 
   });
 
