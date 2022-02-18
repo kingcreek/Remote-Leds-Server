@@ -5,10 +5,6 @@ var app = require('express')();
 var http = require('http');
 
 
-
-const tmi = require('tmi.js');
-
-
 var server = http.Server(app);
 const {Server} = require('ws');
 const wss = new Server({
