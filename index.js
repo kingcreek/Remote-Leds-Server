@@ -72,6 +72,7 @@ wss.on('connection', (ws, request) => {
         ledsSocket.push(ws);
       break;
       default:
+        console.log(obj);
         sendData(obj);
         break;
 
