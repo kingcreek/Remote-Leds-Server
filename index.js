@@ -21,7 +21,7 @@ const wss = new Server({
 });
 
 
-var ledsSocket;
+var ledsSocket = [];
 
 
 
@@ -68,16 +68,11 @@ wss.on('connection', (ws, request) => {
     }
 
     switch (obj.tp) {
-      case "Login":
-        //si es desde el navegador, se recibe "w:'b'"
-        if(obj.iAmTheServerinKingcreekHouse){
-          ledsSocket = ws;
-        }
-        //login.login(ws, obj);
-        break;
-
-      case "getCommandList":
-        //commands.getCommandList(ws);
+      case "REGISTERESP32":
+        ledsSocket.push(ws);
+      break;
+      default:
+        sendData(obj);
         break;
 
       
@@ -89,6 +84,12 @@ wss.on('connection', (ws, request) => {
 
   ws.on('close', () => {
     console.log('Client disconnected')
+
+    //ledsSocket.push(ws);
+    if(ledsSocket.includes(ws)){
+      ledsSocket.splice(ledsSocket.indexOf(ws), 1);
+    }
+
     /*
     for (var key in users) {
       if (users[key].socket.includes(ws)) {
@@ -127,32 +128,9 @@ function sendLoginError(ws) {
 
 
 
-function setActive(ws, obj){
-  var user = Object.keys(users).find(key => users[key].socket.includes(ws));
-  if(users[user] == undefined)
-    return;
 
-  if(obj.type == null || obj.type == undefined)
-    return;
-
-  var dataType;
-  var dataTypeSet;
-  var dataSearch;
-  if(obj.type == "command"){
-    setCommandActive(obj.data.command, obj.enabled, user);
-  }else if(obj.type == "color"){
-    setColorActive(obj.data.command, obj.enabled, user);
-  } else if(obj.type == "reward"){
-    setRewardActive(obj.data.id, obj.enabled, user);
-  }
-}
-
-
-
-
-function sendData(channel, data) {
-  var s2 = channel.substring(1);
-  users[s2].socket.forEach(element => {
+function sendData(data) {
+  ledsSocket.forEach(element => {
     element.send(JSON.stringify(data))
   });
   //users[s2].socket.send(JSON.stringify(data));
