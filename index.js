@@ -70,11 +70,11 @@ wss.on('connection', (ws, request) => {
     switch (obj.tp) {
       case "REGISTERESP32":
         ledsSocket.push(ws);
-        console.log("register esp success");
+        console.log("register esp");
       break;
       default:
         //console.log(obj);
-        sendData(data);
+        sendData(obj);
         break;
 
       
